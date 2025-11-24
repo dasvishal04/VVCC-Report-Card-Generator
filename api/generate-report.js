@@ -17,26 +17,9 @@ export default async function handler(req, res) {
   try {
     const { formData } = req.body;
 
-    // Try multiple ways to access the API key
-    const apiKey = process.env.OPENAI_API_KEY || 
-                   process.env['OPENAI_API_KEY'] ||
-                   process.env.VITE_OPENAI_API_KEY;
-
-    // Debug logging
-    console.log('All env keys:', Object.keys(process.env));
-    console.log('API key found?', !!apiKey);
-    console.log('API key starts with sk-?', apiKey?.startsWith('sk-'));
-
-    if (!apiKey) {
-      console.error('No API key found');
-      return res.status(500).json({ 
-        error: 'API key not configured',
-        envKeys: Object.keys(process.env).filter(k => k.includes('OPENAI') || k.includes('API'))
-      });
-    }
-
+    // TEMPORARY: Hardcode the API key for testing
     const client = new OpenAI({
-      apiKey: apiKey,
+      apiKey: "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", // Replace with your actual key
     });
 
     const prompt = `
