@@ -1,6 +1,5 @@
 // src/components/SwimmerReportCard.jsx
 import React, { useState } from "react";
-import OpenAI from "openai";
 import { PDFDocument, rgb } from "pdf-lib";
 import { Document, Page, pdfjs } from "react-pdf";
 
@@ -114,44 +113,30 @@ function SwimmerReportCard({ config }) {
 
   // ---- AI Report Generator ----
   const generateAIReport = async () => {
-    setLoading(true);
-    try {
-      const client = new OpenAI({
-        apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-        dangerouslyAllowBrowser: true,
-      });
+  setLoading(true);
+  try {
+    const response = await fetch('/api/generate-report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ formData }),
+    });
 
-      const prompt = `
-Write a professional swimming progress report.
-
-Instructor: ${formData.instructor}
-Swimmer: ${formData.firstName} ${formData.lastName}
-Session: ${formData.session}
-Strong Skills: ${formData.strongSkills.join(", ")}
-Skill to Improve: ${formData.improveSkill}
-Missing Must-Sees: ${formData.improveMissing.join(", ")}
-
-"Generate an encouraging and structured swim report card comment.
-Start with: Great effort this session ${formData.firstName}.
-Include praise for two skills the swimmer performed well on (skill 1 and skill 2). Shorten the skill names if needed.
-Then provide one area to improve (skill_to_improve), followed by a brief, clear explanation of what must be seen or demonstrated.
-Do not use the pronoun 'I'.
-Keep the total response to 4 sentences.
-End with: Best of luck next session!"
-      `;
-
-      const response = await client.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-      });
-
-      setAiReport(response.choices[0].message.content);
-    } catch (err) {
-      console.error(err);
-      setAiReport("Error generating report. Please try again.");
+    const data = await response.json();
+    
+    if (data.error) {
+      console.error('API Error:', data.details);
+      setAiReport(data.error);
+    } else {
+      setAiReport(data.report);
     }
-    setLoading(false);
-  };
+  } catch (err) {
+    console.error('Fetch error:', err);
+    setAiReport("Error generating report. Please try again.");
+  }
+  setLoading(false);
+};
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
