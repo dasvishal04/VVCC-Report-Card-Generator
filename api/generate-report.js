@@ -15,24 +15,28 @@ export default async function handler(req, res) {
   }
 
   try {
-    // DEBUG: Log environment variables
-    console.log('Environment variables:', Object.keys(process.env));
-    console.log('OPENAI_API_KEY exists?', !!process.env.OPENAI_API_KEY);
-    console.log('OPENAI_API_KEY length:', process.env.OPENAI_API_KEY?.length);
-    
     const { formData } = req.body;
 
-    // Check if API key exists
-    if (!process.env.OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY not found in environment');
+    // Try multiple ways to access the API key
+    const apiKey = process.env.OPENAI_API_KEY || 
+                   process.env['OPENAI_API_KEY'] ||
+                   process.env.VITE_OPENAI_API_KEY;
+
+    // Debug logging
+    console.log('All env keys:', Object.keys(process.env));
+    console.log('API key found?', !!apiKey);
+    console.log('API key starts with sk-?', apiKey?.startsWith('sk-'));
+
+    if (!apiKey) {
+      console.error('No API key found');
       return res.status(500).json({ 
         error: 'API key not configured',
-        availableEnvVars: Object.keys(process.env)
+        envKeys: Object.keys(process.env).filter(k => k.includes('OPENAI') || k.includes('API'))
       });
     }
 
     const client = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: apiKey,
     });
 
     const prompt = `
