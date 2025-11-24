@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 
 export default async function handler(req, res) {
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -17,9 +16,8 @@ export default async function handler(req, res) {
   try {
     const { formData } = req.body;
 
-    // TEMPORARY: Hardcode the API key for testing
     const client = new OpenAI({
-      apiKey: "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", // Replace with your actual key
+      apiKey: process.env.OPENAI_API_KEY,
     });
 
     const prompt = `
