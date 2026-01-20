@@ -347,95 +347,151 @@ firstPage.drawText(nextLevel, {
   }
 
   // ---- STEP 1: Info + Skills ----
-  if (step === 1) {
-    return (
-      <div className="p-6">
-        <h1 className="swimmer-headding">{config.levelPrefix} {level} Report Card</h1>
+if (step === 1) {
 
-        <div className="step1-wrapper">
-          <label className="sub-text">Instructor Name:</label>
-          <input
-            type="text"
-            className="step1-input"
-            value={formData.instructor}
-            onChange={(e) => setFormData({ ...formData, instructor: e.target.value })}
-          />
-        </div>
+  const toggleSelectAll = (groupSkills, checked) => {
+    setFormData((prev) => {
+      const updatedSkills = { ...prev.skills };
 
-        <div className="step1-wrapper">
-          <label className="sub-text">Swimmer First Name:</label>
-          <input
-            type="text"
-            className="step1-input"
-            value={formData.firstName}
-            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-          />
-        </div>
+      groupSkills.forEach((s) => {
+        updatedSkills[s.skill] = checked;
+      });
 
-        <div className="step1-wrapper">
-          <label className="sub-text">Swimmer Last Name:</label>
-          <input
-            type="text"
-            className="step1-input"
-            value={formData.lastName}
-            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-          />
-        </div>
+      return {
+        ...prev,
+        skills: updatedSkills,
+      };
+    });
+  };
 
-        <div className="step1-wrapper">
-          <label className="sub-text">Session:</label>
-          <input
-            type="text"
-            className="step1-input"
-            value={formData.session}
-            onChange={(e) => setFormData({ ...formData, session: e.target.value })}
-          />
-        </div>
+  return (
+    <div className="p-6">
+      <h1 className="swimmer-headding">
+        {config.levelPrefix} {level} Report Card
+      </h1>
 
-        <h2 className="swimmer-headding">Select Passed Skills</h2>
-        <div className="">
-          {currentSkillGroups.map((group) => (
-            <div key={group.category} className="border rounded-lg p-4 bg-white">
-              <h3 className="sub-text">{group.category}</h3>
-              <div className="space-y-2">
-                {group.skills.map((s) => (
-                  <label key={s.id} className="skills">
-                    <input
-                      type="checkbox"
-                      checked={formData.skills[s.skill] || false}
-                      onChange={() => handleSkillChange(s.skill)}
-                      className="mr-3 mt-1 flex-shrink-0"
-                    />
-                    <div className="flex-grow">
-                      <div className="font-medium">{s.skill}</div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="continue-wrapper">
-          <button
-            onClick={() => setStep(0)}
-            className="skills-continue bg-gray-500 text-white mr-2"
-          >
-            Back
-          </button>
-          <button
-            disabled={Object.keys(formData.skills).filter((s) => formData.skills[s]).length === 0}
-            onClick={() => setStep(2)}
-            className={`skills-continue ${
-              Object.keys(formData.skills).filter((s) => formData.skills[s]).length > 0
-            }`}
-          >
-            Continue
-          </button>
-        </div>
+      <div className="step1-wrapper">
+        <label className="sub-text">Instructor Name:</label>
+        <input
+          type="text"
+          className="step1-input"
+          value={formData.instructor}
+          onChange={(e) =>
+            setFormData({ ...formData, instructor: e.target.value })
+          }
+        />
       </div>
-    );
-  }
+
+      <div className="step1-wrapper">
+        <label className="sub-text">Swimmer First Name:</label>
+        <input
+          type="text"
+          className="step1-input"
+          value={formData.firstName}
+          onChange={(e) =>
+            setFormData({ ...formData, firstName: e.target.value })
+          }
+        />
+      </div>
+
+      <div className="step1-wrapper">
+        <label className="sub-text">Swimmer Last Name:</label>
+        <input
+          type="text"
+          className="step1-input"
+          value={formData.lastName}
+          onChange={(e) =>
+            setFormData({ ...formData, lastName: e.target.value })
+          }
+        />
+      </div>
+
+      <div className="step1-wrapper">
+        <label className="sub-text">Session:</label>
+        <input
+          type="text"
+          className="step1-input"
+          value={formData.session}
+          onChange={(e) =>
+            setFormData({ ...formData, session: e.target.value })
+          }
+        />
+      </div>
+
+      <h2 className="swimmer-headding">Select Passed Skills</h2>
+
+      <div className="space-y-4">
+        {currentSkillGroups.map((group) => (
+          <div
+            key={group.category}
+            className="border rounded-lg p-4 bg-white"
+          >
+            {/* Category Header + Select All */}
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="sub-text">{group.category}</h3>
+
+              <label className="flex items-center text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={group.skills.every(
+                    (s) => formData.skills[s.skill]
+                  )}
+                  onChange={(e) =>
+                    toggleSelectAll(group.skills, e.target.checked)
+                  }
+                />
+                Select all
+              </label>
+            </div>
+
+            {/* Individual Skills */}
+            <div className="space-y-2">
+              {group.skills.map((s) => (
+                <label key={s.id} className="skills">
+                  <input
+                    type="checkbox"
+                    checked={formData.skills[s.skill] || false}
+                    onChange={() => handleSkillChange(s.skill)}
+                    className="mr-3 mt-1 flex-shrink-0"
+                  />
+                  <div className="flex-grow">
+                    <div className="font-medium">{s.skill}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="continue-wrapper mt-6">
+        <button
+          onClick={() => setStep(0)}
+          className="skills-continue bg-gray-500 text-white mr-2"
+        >
+          Back
+        </button>
+
+        <button
+          disabled={
+            Object.keys(formData.skills).filter(
+              (s) => formData.skills[s]
+            ).length === 0
+          }
+          onClick={() => setStep(2)}
+          className={`skills-continue ${
+            Object.keys(formData.skills).filter(
+              (s) => formData.skills[s]
+            ).length > 0
+          }`}
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  );
+}
 
   // ---- STEP 2: Strong + Improve ----
   if (step === 2) {
