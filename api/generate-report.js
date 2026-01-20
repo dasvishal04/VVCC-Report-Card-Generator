@@ -67,9 +67,7 @@ STRICT RULES:
 
 REQUIRED STRUCTURE (copy exactly, only replace bracketed values):
 
-Great job this session, {FirstName}.  
-Excellent work on {StrongSkills}.  
-For the next level, continue to focus on {MissingMustSees} when practicing {ImproveSkill}.  
+Great job this session, {FirstName}. Excellent work on {StrongSkills}. For the next level, continue to focus on {MissingMustSees} when practicing {ImproveSkill}.  
 It was a pleasure teaching you. Keep up the great effort, and best of luck next session!
 
 DATA:
@@ -84,7 +82,7 @@ DATA:
 `.trim();
 
     const response = await client.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1",
       messages: [{ role: "user", content: prompt }],
     });
 
