@@ -346,15 +346,18 @@ firstPage.drawText(nextLevel, {
     );
   }
 
-  // ---- STEP 1: Info + Skills ----
+// ---- STEP 1: Info + Skills ----
 if (step === 1) {
 
-  const toggleSelectAll = (groupSkills, checked) => {
+  // Toggle ALL skills on the page
+  const toggleSelectAllSkills = (checked) => {
     setFormData((prev) => {
       const updatedSkills = { ...prev.skills };
 
-      groupSkills.forEach((s) => {
-        updatedSkills[s.skill] = checked;
+      currentSkillGroups.forEach((group) => {
+        group.skills.forEach((s) => {
+          updatedSkills[s.skill] = checked;
+        });
       });
 
       return {
@@ -363,6 +366,11 @@ if (step === 1) {
       };
     });
   };
+
+  // Check if ALL skills are selected
+  const allSkillsSelected = currentSkillGroups.every((group) =>
+    group.skills.every((s) => formData.skills[s.skill])
+  );
 
   return (
     <div className="p-6">
@@ -418,6 +426,17 @@ if (step === 1) {
         />
       </div>
 
+      {/* GLOBAL SELECT ALL */}
+      <div className="flex items-center mb-4">
+        <input
+          type="checkbox"
+          className="mr-2"
+          checked={allSkillsSelected}
+          onChange={(e) => toggleSelectAllSkills(e.target.checked)}
+        />
+        <span className="font-medium">Select all skills</span>
+      </div>
+
       <h2 className="swimmer-headding">Select Passed Skills</h2>
 
       <div className="space-y-4">
@@ -426,26 +445,8 @@ if (step === 1) {
             key={group.category}
             className="border rounded-lg p-4 bg-white"
           >
-            {/* Category Header + Select All */}
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="sub-text">{group.category}</h3>
+            <h3 className="sub-text mb-2">{group.category}</h3>
 
-              <label className="flex items-center text-sm cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={group.skills.every(
-                    (s) => formData.skills[s.skill]
-                  )}
-                  onChange={(e) =>
-                    toggleSelectAll(group.skills, e.target.checked)
-                  }
-                />
-                Select all
-              </label>
-            </div>
-
-            {/* Individual Skills */}
             <div className="space-y-2">
               {group.skills.map((s) => (
                 <label key={s.id} className="skills">
@@ -480,11 +481,7 @@ if (step === 1) {
             ).length === 0
           }
           onClick={() => setStep(2)}
-          className={`skills-continue ${
-            Object.keys(formData.skills).filter(
-              (s) => formData.skills[s]
-            ).length > 0
-          }`}
+          className="skills-continue"
         >
           Continue
         </button>
@@ -492,6 +489,7 @@ if (step === 1) {
     </div>
   );
 }
+
 
   // ---- STEP 2: Strong + Improve ----
   if (step === 2) {
