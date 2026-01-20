@@ -13,7 +13,6 @@ export const adult3SkillGroups = [
       { 
         skill: "Legs-only surface support 30–60 sec.",
         mustSee: [
-          "*comment on must see of the kick swimmer is using*",
           "Ensure your body is vertical with mouth and nose above the surface of the water"
         ],
         id: 4 
@@ -80,7 +79,6 @@ export const adult3SkillGroups = [
           "Make you're your hand reaches forward beyond your shoulder and then pull down past your hip",
           "Make sure your kick is continuous and is initiated from your hip while kicking at the surface of the water",
           "Make sure you keep your eyes above the surface of the water",
-          "Ensure you have a streamlined body position by [add comment about arms/legs]"
         ],
         id: 11 
       },

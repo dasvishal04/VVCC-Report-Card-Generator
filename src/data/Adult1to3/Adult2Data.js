@@ -82,7 +82,6 @@ export const adult2SkillGroups = [
         mustSee: [
           "Ensure both arms pull towards your chest at the same time with elbow higher than hands and then extend beyond your head when gliding",
           "Ensure you are always exhaling when your face is in the water",
-          "Ensure your body is horizontal on your front by [add comment about arms/breathing]"
         ],
         id: 14 
       },
@@ -92,7 +91,7 @@ export const adult2SkillGroups = [
           "Make sure your arms are always alternating reaching high out of the water and you have an underwater pull",
           "Ensure your kick is continuous and initiated from your hips",
           "Ensure you are blowing bubbles when your face is in the water and you have a continuous breathing pattern to the side",
-          "Make sure your body is streamlined by [add comment about legs/breathing]"
+          "Make sure your body is streamlined by keeping your kicking at the top of the water"
         ],
         id: 15 
       },
@@ -103,7 +102,6 @@ export const adult2SkillGroups = [
           "Make sure your arms are always alternating high out of the water and you have an underwater pull",
           "Remember to keep your legs and feet relaxed as you kick",
           "Ensure your breathing is relaxed",
-          "Remember to keep your body on your back by [add comment about arms/legs/breathing]"
         ],
         id: 16 
       },

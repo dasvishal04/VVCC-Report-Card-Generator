@@ -7,14 +7,34 @@ const client = new OpenAI({
 
 export async function generateReport(formData) {
   const prompt = `
-  Write a swim progress report in complete sentences based on this information:
-  - Instructor: ${formData.instructor}
-  - Swimmer: ${formData.firstName} ${formData.lastName}
-  - Session: ${formData.session}
-  - Strong Skills: ${formData.strongSkills.join(", ")}
-  - Needs Improvement: ${formData.improveSkill}
-  - Missing Must-Sees: ${formData.missingMustSees.join(", ") || "None"}
-  `;
+You are generating a swim progress report.
+
+STRICT RULES:
+- Write exactly ONE paragraph.
+- Use complete, grammatically correct sentences.
+- Use SIMPLE PAST tense for observed performance.
+- Use PRESENT IMPERATIVE tense for encouragement.
+- Do NOT use future tense or present perfect tense.
+- Do NOT add extra commentary or advice.
+- Follow the sentence structure exactly as written.
+- Use a professional, encouraging tone.
+- Do NOT repeat the swimmer’s name more than once.
+
+REQUIRED STRUCTURE (do not alter wording):
+
+"Excellent work this session, {FirstName}. You demonstrated strong ability in {StrongSkills}. Moving forward, continue to focus on {MissingMustSees} when practicing {ImproveSkill}. Keep up the great effort, and best of luck next session!"
+
+DATA:
+- FirstName: ${formData.firstName}
+- StrongSkills: ${formData.strongSkills.join(", ")}
+- ImproveSkill: ${formData.improveSkill}
+- MissingMustSees: ${
+    formData.missingMustSees.length > 0
+      ? formData.missingMustSees.join(", ")
+      : "maintaining consistent technique"
+  }
+`;
+
 
   const response = await client.chat.completions.create({
     model: "gpt-4o-mini",
