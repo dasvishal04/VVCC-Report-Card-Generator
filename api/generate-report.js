@@ -1,12 +1,26 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true, // ⚠️ for testing only
-});
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-export async function generateReport(formData) {
-  const prompt = `
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { formData } = req.body;
+
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    const prompt = `
 You are generating a swim progress report.
 
 STRICT RULES:
@@ -40,10 +54,19 @@ DATA:
   }
 `;
 
-  const response = await client.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [{ role: "user", content: prompt }],
-  });
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+    });
 
-  return response.choices[0].message.content.trim();
+    return res.status(200).json({ 
+      report: response.choices[0].message.content 
+    });
+  } catch (error) {
+    console.error('OpenAI API Error:', error);
+    return res.status(500).json({ 
+      error: 'Error generating report. Please try again.',
+      details: error.message
+    });
+  }
 }
