@@ -48,7 +48,7 @@ STRICT RULES:
 REQUIRED STRUCTURE (copy exactly, only replace bracketed values):
 
 Great job this session, {FirstName}. Excellent work on your {StrongSkills}. For the next level, continue to focus on {MissingMustSees} when doing {ImproveSkill}.  
-It was a pleasure teaching you, keep up the great effort, and best of luck next session!
+It was a pleasure teaching you. Keep up the great effort, and best of luck next session!
     `.trim();
 
     const response = await client.chat.completions.create({
