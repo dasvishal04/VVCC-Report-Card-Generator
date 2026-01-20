@@ -21,6 +21,15 @@ export default async function handler(req, res) {
     });
 
     const prompt = `
+Write a professional swimming progress report.
+
+Instructor: ${formData.instructor}
+Swimmer: ${formData.firstName} ${formData.lastName}
+Session: ${formData.session}
+Strong Skills: ${formData.strongSkills.join(", ")}
+Skill to Improve: ${formData.improveSkill}
+Missing Must-Sees: ${formData.improveMissing.join(", ")}
+
 You are generating a swim progress report.
 
 STRICT RULES:
@@ -42,17 +51,7 @@ Excellent work this session, {FirstName}.
 You demonstrated strong ability in {StrongSkills}.  
 Moving forward, continue to focus on {MissingMustSees} when practicing {ImproveSkill}.  
 Keep up the great effort, and best of luck next session!
-
-DATA:
-- FirstName: ${formData.firstName}
-- StrongSkills: ${formData.strongSkills.join(", ")}
-- ImproveSkill: ${formData.improveSkill}
-- MissingMustSees: ${
-    formData.missingMustSees.length > 0
-      ? formData.missingMustSees.join(", ")
-      : "maintaining consistent technique"
-  }
-`;
+    `.trim();
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
