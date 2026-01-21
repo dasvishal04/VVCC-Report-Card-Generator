@@ -426,18 +426,19 @@ if (step === 1) {
         />
       </div>
 
-      {/* GLOBAL SELECT ALL */}
-      <div className="flex items-center mb-4">
+      <h2 className="swimmer-headding">Select Passed Skills</h2>
+
+       {/* GLOBAL SELECT ALL */}
+      <div className="space-y-2">
+        <label className="skills">
         <input
           type="checkbox"
-          className="mr-2"
+          className="skills"
           checked={allSkillsSelected}
           onChange={(e) => toggleSelectAllSkills(e.target.checked)}
-        />
-        <span className="font-medium">Select all skills</span>
+        />SELECTE ALL SKILLS
+        </label>
       </div>
-
-      <h2 className="swimmer-headding">Select Passed Skills</h2>
 
       <div className="space-y-4">
         {currentSkillGroups.map((group) => (
